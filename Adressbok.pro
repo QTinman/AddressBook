@@ -51,4 +51,6 @@ RESOURCES += \
     resources.qrc
 
 DISTFILES += \
-    README.md
+    README.md \
+    adressbok1.png \
+    adressbok2.png
