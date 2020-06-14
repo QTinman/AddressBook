@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SettingsDialog</class>
+ <widget class="QDialog" name="SettingsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>534</width>
+    <height>369</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>App name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="appnavn"/>
+   </item>
+   <item row="0" column="2" colspan="2">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Database name</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4">
+    <widget class="QLineEdit" name="databasenavn"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="dbTablelabel">
+     <property name="text">
+      <string>DB table</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="dbTable"/>
+   </item>
+   <item row="1" column="2" colspan="2">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Relative table</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4">
+    <widget class="QLineEdit" name="relativedb"/>
+   </item>
+   <item row="2" column="0" colspan="3">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Database columns (max six)</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="1">
+       <widget class="QLabel" name="label_18">
+        <property name="text">
+         <string>Column name</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_19">
+        <property name="text">
+         <string>Type</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>1:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="felt0"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="QComboBox" name="cfelt0"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>2:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="felt1"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="QComboBox" name="cfelt1"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>3:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="felt2"/>
+      </item>
+      <item row="3" column="2">
+       <widget class="QComboBox" name="cfelt2"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>4:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="felt3"/>
+      </item>
+      <item row="4" column="2">
+       <widget class="QComboBox" name="cfelt3"/>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>5:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="felt4"/>
+      </item>
+      <item row="5" column="2">
+       <widget class="QComboBox" name="cfelt4"/>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>6:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="felt5"/>
+      </item>
+      <item row="6" column="2">
+       <widget class="QComboBox" name="cfelt5"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="3" colspan="2">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Relative database</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="1">
+       <widget class="QLabel" name="label_21">
+        <property name="text">
+         <string>Column name</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_22">
+        <property name="text">
+         <string>Type</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>1:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="felt0_2"/>
+      </item>
+      <item row="1" column="2">
+       <widget class="QComboBox" name="cfelt0_2"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>2:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="felt1_2"/>
+      </item>
+      <item row="2" column="2">
+       <widget class="QComboBox" name="cfelt1_2"/>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string>3:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="felt2_2"/>
+      </item>
+      <item row="3" column="2">
+       <widget class="QComboBox" name="cfelt2_2"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>4:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="felt3_2"/>
+      </item>
+      <item row="4" column="2">
+       <widget class="QComboBox" name="cfelt3_2"/>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>5:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="felt4_2"/>
+      </item>
+      <item row="5" column="2">
+       <widget class="QComboBox" name="cfelt4_2"/>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>6:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="felt5_2"/>
+      </item>
+      <item row="6" column="2">
+       <widget class="QComboBox" name="cfelt5_2"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="message">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>Import/convert DB</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="4">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>appnavn</tabstop>
+  <tabstop>databasenavn</tabstop>
+  <tabstop>dbTable</tabstop>
+  <tabstop>relativedb</tabstop>
+  <tabstop>felt0</tabstop>
+  <tabstop>cfelt0</tabstop>
+  <tabstop>felt1</tabstop>
+  <tabstop>cfelt1</tabstop>
+  <tabstop>felt2</tabstop>
+  <tabstop>cfelt2</tabstop>
+  <tabstop>felt3</tabstop>
+  <tabstop>cfelt3</tabstop>
+  <tabstop>felt4</tabstop>
+  <tabstop>cfelt4</tabstop>
+  <tabstop>felt5</tabstop>
+  <tabstop>cfelt5</tabstop>
+  <tabstop>felt0_2</tabstop>
+  <tabstop>cfelt0_2</tabstop>
+  <tabstop>felt1_2</tabstop>
+  <tabstop>cfelt1_2</tabstop>
+  <tabstop>felt2_2</tabstop>
+  <tabstop>cfelt2_2</tabstop>
+  <tabstop>felt3_2</tabstop>
+  <tabstop>cfelt3_2</tabstop>
+  <tabstop>felt4_2</tabstop>
+  <tabstop>cfelt4_2</tabstop>
+  <tabstop>felt5_2</tabstop>
+  <tabstop>cfelt5_2</tabstop>
+  <tabstop>pushButton</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

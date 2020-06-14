@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/new/icon">
+        <file>a_black.png</file>
+    </qresource>
+    <qresource prefix="/translate">
+        <file>norsk.qm</file>
+    </qresource>
+</RCC>
