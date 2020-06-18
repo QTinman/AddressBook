@@ -19,6 +19,7 @@ SOURCES += \
     convertdialog.cpp \
     delegate.cpp \
     expdelegate.cpp \
+    exportdialog.cpp \
     main.cpp \
     mainwindow.cpp \
     printborder.cpp \
@@ -30,6 +31,7 @@ HEADERS += \
     convertdialog.h \
     delegate.h \
     expdelegate.h \
+    exportdialog.h \
     mainwindow.h \
     printborder.h \
     relativedb.h \
@@ -38,6 +40,7 @@ HEADERS += \
 
 FORMS += \
     convertdialog.ui \
+    exportdialog.ui \
     mainwindow.ui \
     relativedb.ui \
     settingsdialog.ui

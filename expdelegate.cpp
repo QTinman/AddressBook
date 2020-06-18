@@ -4,6 +4,7 @@
 #include <QIntValidator>
 #include <QRegExpValidator>
 #include "relativedb.h"
+#include "mainwindow.h"
 
 ItemDelegate::ItemDelegate(QObject *parent) :
     QItemDelegate(parent)
@@ -57,7 +58,7 @@ QVariant ItemDelegate::loadsettings(QString settings) const
 {
     QVariant returnvar;
     QSettings appsettings("QTinman","adressbok");
-    appsettings.beginGroup("database");
+    appsettings.beginGroup(appgroup);
     returnvar = appsettings.value(settings);
     appsettings.endGroup();
     return returnvar;

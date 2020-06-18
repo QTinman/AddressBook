@@ -2,8 +2,11 @@
 #include "ui_settingsdialog.h"
 #include <QSettings>
 #include <QDebug>
+#include <QFileDialog>
 #include "convertdialog.h"
 #include "printborder.h"
+#include "mainwindow.h"
+#include "exportdialog.h"
 
 SettingsDialog::SettingsDialog(QWidget *parent) :
     QDialog(parent),
@@ -30,7 +33,7 @@ void SettingsDialog::on_buttonBox_accepted()
 void SettingsDialog::load_data()
 {
     QSettings appsettings("QTinman","adressbok");
-    appsettings.beginGroup("database");
+    appsettings.beginGroup(appgroup);
     QList<QString> combolist;
     combolist.append("String");
     combolist.append("Number");
@@ -63,7 +66,7 @@ void SettingsDialog::load_data()
 void SettingsDialog::load_relativedata()
 {
     QSettings appsettings("QTinman","adressbok");
-    appsettings.beginGroup("database");
+    appsettings.beginGroup(appgroup);
     QList<QString> combolist;
     combolist.append("String");
     combolist.append("Number");
@@ -113,8 +116,8 @@ void SettingsDialog::load_relativedata()
 void SettingsDialog::save_data()
 {
     QSettings appsettings("QTinman","adressbok");
-    appsettings.beginGroup("database");
-    if (ui->databasenavn->text()!="") appsettings.setValue("databasenavn",QVariant(ui->databasenavn->text().toLower()));
+    appsettings.beginGroup(appgroup);
+    if (ui->databasenavn->text()!="") appsettings.setValue("databasenavn",QVariant(ui->databasenavn->text()));
     if (ui->appnavn->text()!="") appsettings.setValue("appnavn",QVariant(ui->appnavn->text()));
     if (ui->dbTable->text()!="") appsettings.setValue("dbTable",QVariant(ui->dbTable->text()));
     if (ui->felt0->text()!="") appsettings.setValue("felt0",QVariant(ui->felt0->text().toLower()));
@@ -147,8 +150,8 @@ void SettingsDialog::save_data()
 void SettingsDialog::save_relativedata()
 {
     QSettings appsettings("QTinman","adressbok");
-    appsettings.beginGroup("database");
-    if (ui->relativedb->text()!="") appsettings.setValue("relativedb",QVariant(ui->relativedb->text().toLower()));
+    appsettings.beginGroup(appgroup);
+    if (ui->relativedb->text()!="") appsettings.setValue("relativedb",QVariant(ui->relativedb->text()));
     if (ui->felt0_2->text()!="") appsettings.setValue("felt0_2",QVariant(ui->felt0_2->text().toLower()));
     if (ui->felt1_2->text()!="") appsettings.setValue("felt1_2",QVariant(ui->felt1_2->text().toLower()));
     if (ui->felt2_2->text()!="") appsettings.setValue("felt2_2",QVariant(ui->felt2_2->text().toLower()));
@@ -184,4 +187,60 @@ void SettingsDialog::on_pushButton_clicked() //Convert
     PrintBorder * load = new PrintBorder;
     ui->databasenavn->setText(load->loadsettings("databasenavn").toString());
     ui->dbTable->setText(load->loadsettings("dbTable").toString());
+}
+
+void SettingsDialog::on_pushButton_2_clicked() // export to CSV
+{
+    exportDialog exportdialog;
+    exportdialog.setModal(true);
+    exportdialog.exec();
+}
+
+
+void SettingsDialog::on_selectDB_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Select DB"), "./", tr("DB Files (*.db)"));
+    if (fileName != "") {
+        ui->databasenavn->setText(fileName);
+        db.setDatabaseName(fileName);
+        if (!db.open()) qDebug() << db.lastError();
+        sqlmodel = new QSqlTableModel(this,db);
+        QStringList tables = db.tables();
+        int i=1;
+        QString fields[6]={};
+        for ( const auto& table : tables  )
+        {
+
+            int h;
+            sqlmodel->setTable(table);
+            if (sqlmodel->headerData(0,Qt::Horizontal).toString().toLower() != "id") h=0;
+            else h=1;
+            int col=sqlmodel->columnCount();
+            if (col>6) col=6;
+            if (i==1){
+                for (int c=h;c<col;c++)
+                    fields[c-h] = sqlmodel->headerData(c,Qt::Horizontal).toString();
+                ui->felt0->setText(fields[0]);
+                ui->felt1->setText(fields[1]);
+                ui->felt2->setText(fields[2]);
+                ui->felt3->setText(fields[3]);
+                ui->felt4->setText(fields[4]);
+                ui->felt5->setText(fields[5]);
+                ui->dbTable->setText(table);
+            }
+            if (i==2){
+                for (int c=h;c<col;c++)
+                    fields[c-h] = sqlmodel->headerData(c,Qt::Horizontal).toString();
+                ui->felt0_2->setText(fields[0]);
+                ui->felt1_2->setText(fields[1]);
+                ui->felt2_2->setText(fields[2]);
+                ui->felt3_2->setText(fields[3]);
+                ui->felt4_2->setText(fields[4]);
+                ui->felt5_2->setText(fields[5]);
+                ui->relativedb->setText(table);
+            }
+            i++;
+        }
+    }
 }

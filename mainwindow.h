@@ -8,6 +8,7 @@
 #include "relativedb.h"
 
 extern int id;
+extern QString appgroup;
 extern QSqlDatabase db;
 
 QT_BEGIN_NAMESPACE

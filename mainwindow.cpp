@@ -7,6 +7,7 @@
 #include <QInputDialog>
 
 int id;
+QString appgroup;
 QSqlDatabase db;
 
 MainWindow::MainWindow(QWidget *parent)
@@ -15,7 +16,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
-
+    db = QSqlDatabase::addDatabase("QSQLITE","vskv");
+    appgroup = QDir::currentPath();
+    int l = appgroup.lastIndexOf("/");
+    appgroup = appgroup.mid(l+1,appgroup.length()-l)+"_database";
     QSettings appsettings("QTinman","adressbok");
     setGeometry(loadsettings("position").toRect());
     if (loadsettings("appnavn") == "") this->setWindowTitle(tr("Address book"));
@@ -24,9 +28,10 @@ MainWindow::MainWindow(QWidget *parent)
     if (loadsettings("relativedb").toString() == "") ui->relativedb->hide();
     else ui->relativedb->setText(loadsettings("relativedb").toString().mid(0,1).toUpper()+loadsettings("relativedb").toString().mid(1,loadsettings("relativedb").toString().length()-1));
     QString vskv=loadsettings("databasenavn").toString();
-    db = QSqlDatabase::addDatabase("QSQLITE","vskv");
-    db.setHostName("localhost");
+
+    //db.setHostName("localhost");
     db.setDatabaseName(vskv);
+
     QString dbase=loadsettings("dbTable").toString();
     if (!db.open()) {
          qDebug() << db.lastError();
@@ -98,7 +103,7 @@ QVariant MainWindow::loadsettings(QString settings)
 {
     QVariant returnvar;
     QSettings appsettings("QTinman","adressbok");
-    appsettings.beginGroup("database");
+    appsettings.beginGroup(appgroup);
     returnvar = appsettings.value(settings);
     appsettings.endGroup();
     return returnvar;
@@ -107,7 +112,7 @@ QVariant MainWindow::loadsettings(QString settings)
 void MainWindow::savesettings(QString settings, QVariant attr)
 {
     QSettings appsettings("QTinman","adressbok");
-    appsettings.beginGroup("database");
+    appsettings.beginGroup(appgroup);
     appsettings.setValue(settings,attr);
     appsettings.endGroup();
 }
@@ -233,14 +238,16 @@ void MainWindow::on_action_Language_triggered()
 
 void MainWindow::deleteRelative(const int& row)
 {
-    ui->tableView->selectRow(row);
-    QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
-    QModelIndex index = indexes.at(0);
-    int id = model->data(index.sibling(index.row(),0)).toInt();
+    QString relativdb = loadsettings("relativedb").toString();
+    if (relativdb != "") {
+        ui->tableView->selectRow(row);
+        QModelIndexList indexes = ui->tableView->selectionModel()->selection().indexes();
+        QModelIndex index = indexes.at(0);
+        int rid = model->data(index.sibling(index.row(),0)).toInt();
 
-    QString qryString = "DELETE FROM "+loadsettings("relativedb").toString()+" WHERE ID="+QString::number(id)+";";
-    QSqlQuery qry(db);
-    if (!qry.exec(qryString)) ui->label->setText("Error "+qry.lastError().text());
-    qry.finish();
-    //qDebug() << qryString;
+        QString qryString = "DELETE FROM "+relativdb+" WHERE ID="+QString::number(rid)+";";
+        QSqlQuery qry(db);
+        if (!qry.exec(qryString)) ui->label->setText("Error "+qry.lastError().text());
+        qry.finish();
+    }
 }

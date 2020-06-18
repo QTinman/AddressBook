@@ -47,7 +47,7 @@ QVariant relativedb::loadsettings(QString settings)
 {
     QVariant returnvar;
     QSettings appsettings("QTinman","adressbok");
-    appsettings.beginGroup("database");
+    appsettings.beginGroup(appgroup);
     returnvar = appsettings.value(settings);
     appsettings.endGroup();
     return returnvar;
@@ -56,7 +56,7 @@ QVariant relativedb::loadsettings(QString settings)
 void relativedb::savesettings(QString settings, QVariant attr)
 {
     QSettings appsettings("QTinman","adressbok");
-    appsettings.beginGroup("database");
+    appsettings.beginGroup(appgroup);
     appsettings.setValue(settings,attr);
     appsettings.endGroup();
 }

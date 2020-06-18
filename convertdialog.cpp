@@ -8,10 +8,11 @@ convertDialog::convertDialog(QWidget *parent) :
     ui(new Ui::convertDialog)
 {
     ui->setupUi(this);
-
+    db_ut = QSqlDatabase::addDatabase("QSQLITE","convert_ut");
     connect(ui->db_out,SIGNAL(editingFinished()),this,SLOT(lineeditslot()));
     connect(ui->db_in,SIGNAL(editingFinished()),this,SLOT(lineeditslot()));
     connect(ui->addfieldname,SIGNAL(editingFinished()),this,SLOT(lineeditslot()));
+    connect(ui->db_out_table,SIGNAL(editingFinished()),this,SLOT(lineeditslot()));
     hideall();
     loadinfields();
 
@@ -21,6 +22,7 @@ convertDialog::convertDialog(QWidget *parent) :
 
 convertDialog::~convertDialog()
 {
+    db_ut.removeDatabase("convert_ut");
     delete ui;
 }
 
@@ -50,7 +52,7 @@ void convertDialog::loadinfields()
     //qDebug() << ui->
 }
 
-void convertDialog::loadoutfields()
+void convertDialog::loadoutfields(int col)
 {
     PrintBorder * load = new PrintBorder;
     QStringList fields;
@@ -82,32 +84,32 @@ void convertDialog::loadoutfields()
     ui->utfield6->addItems(fields);
     if (ui->addfieldname->text() != "") ui->addfield->setEnabled(true);
     ui->removefield->setEnabled(true);
-    if (i > 1) {
+    if (col >= 1) {
         ui->utfield1->setEnabled(true);
         ui->utfield1->setCurrentIndex(0);
         ui->infield1->setEnabled(true);
     }
-    if (i > 2) {
+    if (col >= 2) {
         ui->utfield2->setEnabled(true);
         ui->utfield2->setCurrentIndex(1);
         ui->infield2->setEnabled(true);
     }
-    if (i > 3) {
+    if (col >= 3) {
         ui->utfield3->setEnabled(true);
         ui->utfield3->setCurrentIndex(2);
         ui->infield3->setEnabled(true);
     }
-    if (i > 4) {
+    if (col >= 4) {
         ui->utfield4->setEnabled(true);
         ui->utfield4->setCurrentIndex(3);
         ui->infield4->setEnabled(true);
     }
-    if (i > 5) {
+    if (col >= 5) {
         ui->utfield5->setEnabled(true);
         ui->utfield5->setCurrentIndex(4);
         ui->infield5->setEnabled(true);
     }
-    if (i > 6) {
+    if (col >= 6) {
         ui->utfield6->setEnabled(true);
         ui->utfield6->setCurrentIndex(5);
         ui->infield6->setEnabled(true);
@@ -134,6 +136,7 @@ void convertDialog::on_selectdb_clicked()
         }
     }else{
         db = QSqlDatabase::addDatabase("QSQLITE","convert_inn");
+        qDebug() << fileName;
         db.setDatabaseName(fileName);
         ui->message->setText(tr("SqLite selected"));
         if (db.open()) ui->tables->addItems(db.tables());
@@ -148,18 +151,22 @@ void convertDialog::on_selectdb_clicked()
         }
         db.close();
     }
+
     QFile dbfile(ui->db_out->text());
-    if (dbfile.exists()) ui->message->setText(tr("File exists! Convert will overwrite!"));
+    db_ut.setDatabaseName(ui->db_out->text());
+    db_ut.open();
+    if (db_ut.tables().contains(ui->db_out_table->text())) ui->message->setText(tr("Table exists! Convert will replace!"));
     else ui->message->clear();
     if (ui->db_in->text() != "") ui->pushButton->setEnabled(true);
     else ui->pushButton->setDisabled(true);
+    db_ut.close();
 }
 
 void convertDialog::on_pushButton_clicked() //load fields
 {
     //QString database = ui->db_in->text();
 
-    loadoutfields();
+    //loadoutfields();
     QStringList fields;
     //QString field;
     //    ui->utfield1->count();
@@ -182,10 +189,17 @@ void convertDialog::on_pushButton_clicked() //load fields
             QList<QStandardItem *> standardItemsList;
             // consider that the line separated by semicolons into columns
             for (QString item : line.split(sepparator)) {
-                fields << item;
+                if (item.toLower() != "id") fields << item;
             }
             csvModel->setColumnCount(fields.count());
+            loadoutfields(fields.count());
             csvModel->setHorizontalHeaderLabels(fields);
+            ui->utfield1->addItems(fields);
+            ui->utfield2->addItems(fields);
+            ui->utfield3->addItems(fields);
+            ui->utfield4->addItems(fields);
+            ui->utfield5->addItems(fields);
+            ui->utfield6->addItems(fields);
             fields << "<none>";
             ui->infield1->addItems(fields);
             ui->infield2->addItems(fields);
@@ -211,9 +225,16 @@ void convertDialog::on_pushButton_clicked() //load fields
             //qDebug() <<  sqlmodel->lastError();
             //qDebug() << ui->tables->currentText();
             int col=sqlmodel->columnCount();
+            loadoutfields(col);
             for (int i=0;i<col;i++){
                 if (sqlmodel->headerData(i,Qt::Horizontal).toString().toLower() != "id") fields << sqlmodel->headerData(i,Qt::Horizontal).toString();
             }
+            ui->utfield1->addItems(fields);
+            ui->utfield2->addItems(fields);
+            ui->utfield3->addItems(fields);
+            ui->utfield4->addItems(fields);
+            ui->utfield5->addItems(fields);
+            ui->utfield6->addItems(fields);
             fields << "<none>";
             ui->infield1->addItems(fields);
             ui->infield2->addItems(fields);
@@ -298,7 +319,9 @@ void convertDialog::on_convert_clicked()
                 //qDebug() << row << " " << col;
                 for (int i = 0; i < row ; ++i) {
                     sql_utmodel->insertRow(sql_utmodel->rowCount(QModelIndex()));
+                    if (csvModel->headerData(0,Qt::Horizontal).toString().toLower() != "id")
                     sql_utmodel->setData(sql_utmodel->index(i, 0),QVariant(i),Qt::EditRole);
+                    else sql_utmodel->setData(sql_utmodel->index(i, 0),csvModel->data(csvModel->index(i, 0,QModelIndex()), Qt::DisplayRole),Qt::EditRole);
                    for (int j = 0; j < col; j++) {
                        QVariant content = csvModel->data(csvModel->index(i, j,QModelIndex()), Qt::DisplayRole);
                        for (int f=0;f<col;f++) {
@@ -357,9 +380,10 @@ void convertDialog::on_convert_clicked()
 
 void convertDialog::createdb()
 {
-    db_ut = QSqlDatabase::addDatabase("QSQLITE","convert_ut");
-    QFile dbfile(ui->db_out->text());
-    if (dbfile.exists()) dbfile.remove();
+
+
+    //QFile dbfile(ui->db_out->text());   //remove table only
+    //if (dbfile.exists()) dbfile.remove();
     db_ut.setDatabaseName(ui->db_out->text());
     QString felt[6] = {};
     QString cfelt[6] = {};
@@ -382,6 +406,12 @@ void convertDialog::createdb()
     QString createTables = "create table "+dbase+"(id integer primary key)";
     if (db_ut.open()) {
 
+        if (db_ut.tables().contains(ui->db_out_table->text())) {
+            QSqlQuery qry(db_ut);
+            QString removetable = "drop table "+ui->db_out_table->text();
+            if (!qry.exec(removetable)) ui->message->setText(tr("Error ")+qry.lastError().text());
+            qry.finish();
+        }
         for (int i=0;i<6;i++) {
 
             if (utfield[i]==felt[0]) utcfield[i] = cfelt[0];
@@ -395,12 +425,13 @@ void convertDialog::createdb()
             else if (utcfield[i] == "Date") utcfield[i] = "varchar(12)";
             else if (utcfield[i] == "Time") utcfield[i] = "varchar(7)";
             else if (utcfield[i] == "LongString") utcfield[i] = "varchar(50)";
+            else utcfield[i] = "varchar(25)";
 
         if (utfield[i] !="" && utfield[i] !="<none>") createTables = createTables.mid(0,createTables.length()-1) + ", " + utfield[i]+" "+utcfield[i]+")";
 
         }
     } else ui->message->setText(tr("Error ")+db_ut.lastError().text());
-    //qDebug() << createTables;
+    qDebug() << createTables;
     QSqlQuery qry(db_ut);
     if (!qry.exec(createTables)) ui->message->setText(tr("Error ")+qry.lastError().text());
     qry.finish();
@@ -412,9 +443,12 @@ void convertDialog::createdb()
 void convertDialog::lineeditslot()
 {
     QFile dbfile(ui->db_out->text());
-
-    if (dbfile.exists()) ui->message->setText(tr("File exists! Convert will overwrite!"));
+    db_ut.setDatabaseName(ui->db_out->text());
+    if (!db_ut.open()) qDebug() << db_ut.lastError();
+    qDebug() << db_ut.tables() << " " << ui->db_out->text();
+    if (db_ut.tables().contains(ui->db_out_table->text())) ui->message->setText(tr("Table exists! Convert will replace!"));
     else ui->message->clear();
+    db_ut.close();
     if (ui->addfieldname->text() != "") ui->addfield->setEnabled(true);
     else ui->addfield->setDisabled(true);
     if (ui->db_in->text() != "") ui->pushButton->setEnabled(true);

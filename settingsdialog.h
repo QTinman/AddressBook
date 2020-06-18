@@ -2,6 +2,7 @@
 #define SETTINGSDIALOG_H
 
 #include <QDialog>
+#include <QtSql>
 
 namespace Ui {
 class SettingsDialog;
@@ -20,12 +21,17 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_pushButton_2_clicked();
+
+    void on_selectDB_clicked();
+
 private:
     Ui::SettingsDialog *ui;
     void load_data();
     void load_relativedata();
     void save_data();
     void save_relativedata();
+    QSqlTableModel * sqlmodel;
 };
 
 #endif // SETTINGSDIALOG_H

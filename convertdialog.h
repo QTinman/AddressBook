@@ -31,7 +31,7 @@ private slots:
 private:
     Ui::convertDialog *ui;
     void hideall();
-    void loadoutfields();
+    void loadoutfields(int col);
     void loadinfields();
     void createdb();
     void updateSettings();

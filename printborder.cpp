@@ -20,9 +20,12 @@ void PrintBorder::preparePage(QPainter *painter) { // print a border on each pag
 // --------------------------------------------------------------------------------
 QVariant PrintBorder::loadsettings(QString settings)
 {
+    appgroup = QDir::currentPath();
+    int l = appgroup.lastIndexOf("/");
+    appgroup = appgroup.mid(l+1,appgroup.length()-l)+"_database";
     QVariant returnvar;
     QSettings appsettings("QTinman","adressbok");
-    appsettings.beginGroup("database");
+    appsettings.beginGroup(appgroup);
     returnvar = appsettings.value(settings);
     appsettings.endGroup();
     return returnvar;
@@ -32,7 +35,7 @@ void PrintBorder::savesettings(QString settings, QVariant attr)
 {
 
     QSettings appsettings("QTinman","adressbok");
-    appsettings.beginGroup("database");
+    appsettings.beginGroup(appgroup);
     appsettings.setValue(settings,attr);
     appsettings.endGroup();
 }
